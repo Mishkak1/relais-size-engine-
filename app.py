@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.set_page_config(page_title="Le Relais Size Engine™", page_icon="🧵")
+st.set_page_config(page_title="Le Relais Size Engine")
 
 st.title("Le Relais Size Engine")
 st.write("Guide de tailles basé sur mesures réelles et profil client.")
@@ -15,7 +15,8 @@ def compare(a, b):
     else:
         return "NO"
 
-st.header("1️⃣ Profil de l'article")
+# 1) Profil de l'article
+st.header("1. Profil de l'article")
 
 genre = st.radio("Genre :", ["homme", "femme"])
 
@@ -28,7 +29,7 @@ categorie = st.selectbox("Catégorie :", categories)
 
 article = {}
 
-st.subheader("Mesures du vêtement")
+st.subheader("Mesures du vêtement (cm)")
 
 if categorie in ["tshirt", "sweat", "jacket", "chemise", "haut"]:
     article["epaules"] = st.number_input("Épaules (cm)", 0.0)
@@ -50,7 +51,8 @@ elif categorie == "jean":
     article["hanches"] = st.number_input("Hanches (cm)", 0.0)
     article["longueur"] = st.number_input("Longueur jambe (cm)", 0.0)
 
-st.header("2️⃣ Profil client")
+# 2) Profil client
+st.header("2. Profil client")
 
 profil = {}
 
@@ -74,24 +76,26 @@ elif categorie == "jean":
     profil["hanches"] = st.number_input("Hanches client (cm)", 0.0)
     profil["longueur"] = st.number_input("Longueur jambe client (cm)", 0.0)
 
-st.header("3️⃣ Recommandation")
+# 3) Recommandation
+st.header("3. Recommandation")
 
 def recommander(article, profil, categorie):
     verdict = ""
     tech = ""
     style = ""
 
+    # HAUTS
     if categorie in ["tshirt", "sweat", "jacket", "chemise", "haut"]:
         ep = compare(article["epaules"], profil["epaules"])
         po = compare(article["poitrine"], profil["poitrine"])
         lo = compare(article["longueur"], profil["longueur"])
 
         if ep == "OK" and po == "OK":
-            verdict = "🟢 OK pour vous"
+            verdict = "OK pour vous"
         elif ep == "NO" or po == "NO":
-            verdict = "🔴 Pas recommandé"
+            verdict = "Pas recommandé"
         else:
-            verdict = "🟠 Coupe différente"
+            verdict = "Coupe différente"
 
         tech = f"Épaules: {ep}, Poitrine: {po}, Longueur: {lo}"
 
@@ -100,47 +104,50 @@ def recommander(article, profil, categorie):
         else:
             style = "Coupe classique."
 
+    # ROBE
     elif categorie == "robe":
         po = compare(article["poitrine"], profil["poitrine"])
         ta = compare(article["taille"], profil["taille"])
         lo = compare(article["longueur"], profil["longueur"])
 
         if po == "OK" and ta == "OK":
-            verdict = "🟢 OK pour vous"
+            verdict = "OK pour vous"
         elif po == "NO" or ta == "NO":
-            verdict = "🔴 Pas recommandé"
+            verdict = "Pas recommandé"
         else:
-            verdict = "🟠 Coupe différente"
+            verdict = "Coupe différente"
 
         tech = f"Poitrine: {po}, Taille: {ta}, Longueur: {lo}"
         style = "Silhouette élégante."
 
+    # JUPE
     elif categorie == "jupe":
         ta = compare(article["taille"], profil["taille"])
         ha = compare(article["hanches"], profil["hanches"])
         lo = compare(article["longueur"], profil["longueur"])
 
         if ta == "OK" and ha == "OK":
-            verdict = "🟢 OK pour vous"
+            verdict = "OK pour vous"
         elif ta == "NO" or ha == "NO":
-            verdict = "🔴 Pas recommandé"
+            verdict = "Pas recommandé"
         else:
-            verdict = "🟠 Coupe différente"
+            verdict = "Coupe différente"
 
         tech = f"Taille: {ta}, Hanches: {ha}, Longueur: {lo}"
         style = "Tombé féminin."
 
+    # JEAN
     elif categorie == "jean":
         ta = compare(article["taille"], profil["taille"])
         ha = compare(article["hanches"], profil["hanches"])
         lo = compare(article["longueur"], profil["longueur"])
 
         if ta == "OK" and ha == "OK":
-            verdict = "🟢 OK pour vous"
+            verdict = "OK pour vous"
         elif ta == "NO" or ha == "NO":
-            verdict = "🔴 Pas recommandé"
+            verdict = "Pas recommandé"
         else:
-            verdict = "🟠 Coupe différente"
+            verdict = "Coupe différente"
 
         tech = f"Taille: {ta}, Hanches: {ha}, Longueur: {lo}"
         style = "Coupe unisexe, silhouette propre."
@@ -149,6 +156,9 @@ def recommander(article, profil, categorie):
 
 if st.button("Lancer la recommandation"):
     v, t, s = recommander(article, profil, categorie)
-    st.subheader(v)
-    st.write("Technique :", t)
-    st.write("Style :", s)
+    st.subheader("Verdict")
+    st.write(v)
+    st.subheader("Technique")
+    st.write(t)
+    st.subheader("Style")
+    st.write(s)
