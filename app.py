@@ -2,7 +2,7 @@ import streamlit as st
 
 st.set_page_config(page_title="Le Relais Size Engine™", page_icon="🧵")
 
-st.title("🧵 Le Relais Size Engine™")
+st.title("Le Relais Size Engine")
 st.write("Guide de tailles basé sur mesures réelles et profil client.")
 
 # Compare values
